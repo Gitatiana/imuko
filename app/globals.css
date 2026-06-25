@@ -1,0 +1,328 @@
+@import "tailwindcss";
+
+/* Paleta real de Imuko, extraída del diseño Elementor original */
+@theme {
+  --color-brand-50: #edf4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-200: #b9d2f0;
+  --color-brand-400: #30618c;
+  --color-brand-500: #155481;
+  --color-brand-600: #16487f;
+  --color-brand-700: #002c58; /* navy primario */
+  --color-brand-800: #001f3f; /* navy profundo (Path section) */
+  --color-brand-900: #0c0b0f; /* casi negro */
+
+  --color-accent: #c711ff;     /* morado vibrante */
+  --color-accent-600: #a800d8;
+  --color-cyan: #30b0e0;       /* cyan secundario */
+  --color-cyan-500: #299bd8;
+
+  --color-cream: #fef5d8;
+  --color-mist: #defffe;
+
+  /* Base oscura premium: casi-negro neutro con un leve frío */
+  --color-base: #0a0b12;
+  --color-base-soft: #0e0f1a;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  /* Movimiento */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ──────────────────────────────────────────────────────────────
+     TOKENS SEMÁNTICOS (theme-aware). Apuntan a variables que cambian
+     bajo .dark / .light. Generan clases Tailwind: bg-page, bg-surface,
+     text-fg, text-muted, text-faint, border-line.
+     ────────────────────────────────────────────────────────────── */
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-fg: var(--c-fg);
+  --color-muted: var(--c-muted);
+  --color-faint: var(--c-faint);
+  --color-line: var(--c-line);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   VALORES DE TEMA
+   El tema se controla con clase en <html>: .dark (default) / .light.
+   :root y .dark comparten los valores oscuros; .light los sobreescribe.
+   ────────────────────────────────────────────────────────────────── */
+:root,
+.dark {
+  --c-page: #0a0b12;
+  --c-surface: #12131c;
+  --c-fg: #f4f5fb; /* casi-blanco */
+  --c-muted: #cbd0dc; /* gray-300/400 */
+  --c-faint: #6b7280; /* gray-500 */
+  --c-line: rgba(255, 255, 255, 0.1); /* white/10 */
+
+  /* Velo de marca del body (halos radiales) */
+  --page-veil-purple: rgba(199, 17, 255, 0.1);
+  --page-veil-cyan: rgba(48, 176, 224, 0.08);
+
+  /* Vidrio */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.6);
+  --glass-strong-bg: rgba(255, 255, 255, 0.08);
+  --glass-strong-border: rgba(255, 255, 255, 0.14);
+  --glass-strong-highlight: rgba(255, 255, 255, 0.1);
+  --glass-strong-shadow: 0 16px 50px -16px rgba(0, 0, 0, 0.7);
+
+  /* Atenuación del mesh decorativo por tema */
+  --mesh-opacity-scale: 1;
+}
+
+.light {
+  --c-page: #f6f7fb;
+  --c-surface: #ffffff;
+  --c-fg: #0f172a; /* slate-900 */
+  --c-muted: #475569; /* slate-600 */
+  --c-faint: #94a3b8; /* slate-400 */
+  --c-line: rgba(0, 0, 0, 0.1); /* black/10 */
+
+  /* Velo de marca más sutil sobre fondo claro */
+  --page-veil-purple: rgba(199, 17, 255, 0.06);
+  --page-veil-cyan: rgba(48, 176, 224, 0.05);
+
+  /* Frosted glass blanco translúcido + borde sutil + sombra suave */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 8px 30px -14px rgba(15, 23, 42, 0.18);
+  --glass-strong-bg: rgba(255, 255, 255, 0.8);
+  --glass-strong-border: rgba(0, 0, 0, 0.1);
+  --glass-strong-highlight: rgba(255, 255, 255, 1);
+  --glass-strong-shadow: 0 16px 50px -18px rgba(15, 23, 42, 0.25);
+
+  /* Mesh más sutil en claro para no ensuciar el fondo */
+  --mesh-opacity-scale: 0.5;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+  Tema oscuro global: base casi-negra neutra (#0a0b12) con un velo de marca:
+  dos halos radiales muy tenues (morado + cyan) fijos al viewport que dan
+  profundidad "SaaS" sin distraer.
+*/
+body {
+  @apply bg-page text-fg antialiased;
+  background-image:
+    radial-gradient(
+      60rem 60rem at 15% -10%,
+      var(--page-veil-purple),
+      transparent 60%
+    ),
+    radial-gradient(
+      55rem 55rem at 100% 0%,
+      var(--page-veil-cyan),
+      transparent 55%
+    );
+  background-attachment: fixed;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* ── Jerarquía tipográfica ── */
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* ── Glows radiales del Hero (estáticos, atmósfera) ── */
+.hero-glow-purple::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(199, 17, 255, 0.25) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-glow-cyan::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  right: -5%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(
+    circle,
+    rgba(48, 176, 224, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Pulso de los pines del mapa (Presencia global) ── */
+@keyframes pin-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(199, 17, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(199, 17, 255, 0);
+  }
+}
+.map-pin {
+  animation: pin-pulse 2s infinite;
+}
+
+/* ── Scroll reveal (fade-in + slide) ── */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  opacity: 0;
+}
+.reveal.is-visible {
+  animation: reveal-up 0.5s ease-out forwards;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — primitivas glass / gradiente / movimiento sutil
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Tarjeta vidrio base ── (adapta fondo/borde/sombra por tema vía vars) */
+.glass {
+  position: relative;
+  border-radius: 1rem; /* rounded-2xl */
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 1px 0 0 var(--glass-highlight) inset, /* highlight superior */
+    var(--glass-shadow);
+}
+
+/* Variante más opaca: formularios y bloques destacados */
+.glass-strong {
+  position: relative;
+  border-radius: 1rem;
+  background-color: var(--glass-strong-bg);
+  border: 1px solid var(--glass-strong-border);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+  box-shadow:
+    0 1px 0 0 var(--glass-strong-highlight) inset,
+    var(--glass-strong-shadow);
+}
+
+/* ── Texto con gradiente de marca (morado → cyan) ── */
+.text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-accent) 0%,
+    var(--color-cyan) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Keyframes sutiles ── */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.animate-float {
+  animation: float 6s var(--ease-out-soft) infinite;
+}
+
+/* Deriva lenta del mesh decorativo (GradientMesh) */
+@keyframes mesh-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -2%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+.animate-mesh-drift {
+  animation: mesh-drift 22s ease-in-out infinite;
+}
+
+/* Borde gradiente animado para GlassCard featured */
+@keyframes gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.animate-gradient-border {
+  background-size: 200% 200%;
+  animation: gradient-border 8s ease infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HERO GLOBE — red global en canvas (sin WebGL). El render vive en
+   components/HeroGlobe.tsx; aquí solo el flote sutil del conjunto.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Flote sutil del conjunto del globo. */
+@keyframes globe-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-globe-float {
+  animation: globe-float 7s var(--ease-out-soft) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-pin {
+    animation: none;
+  }
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    animation: none;
+  }
+  .animate-float,
+  .animate-mesh-drift,
+  .animate-gradient-border,
+  .animate-globe-float {
+    animation: none;
+  }
+}
