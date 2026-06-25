@@ -19,10 +19,10 @@ export default function TerminosPage() {
           <p>
             La dirección de nuestro sitio web es:{" "}
             <a
-              href="https://www.imuko.co"
+              href="https://imuko.co"
               className="text-cyan hover:underline"
             >
-              https://www.imuko.co
+              https://imuko.co
             </a>
             . Al acceder y utilizar este sitio aceptas los presentes términos y
             condiciones de uso, así como las prácticas de privacidad descritas a

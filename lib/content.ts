@@ -5,7 +5,7 @@ export const site = {
   name: "Imuko",
   tagline: "Desarrolladores de software a su alcance",
   email: "talento@imuko.co",
-  url: "https://www.imuko.co",
+  url: "https://imuko.co",
 };
 
 // Plataforma/app de IMUKO (subdominio aparte, SPA con login).
